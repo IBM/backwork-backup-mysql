@@ -7,6 +7,12 @@ import sys
 
 LOG = logging.getLogger(__name__)
 
+
+class MySQLBackupException(Exception):  # pylint: disable=unused-variable
+    """Raise for errors"""
+    pass
+
+
 class MySQLBackup(object):
     """Backup a MySQL database.
 
@@ -33,7 +39,7 @@ class MySQLBackup(object):
 
     def backup(self):
         """Backup a MySQL database."""
-        output_file = None
+        output_file = sys.stdout
         gzip_out = None
         mysqldump_out = None
 
@@ -42,17 +48,10 @@ class MySQLBackup(object):
             output_file = open(self.args.output, 'w')
         if self.args.gzip:
             mysqldump_out = subprocess.PIPE
-
-            if output_file:
-                gzip_out = output_file
-            else:
-                gzip_out = sys.stdout
+            gzip_out = output_file
 
         else:
-            if output_file:
-                mysqldump_out = output_file
-            else:
-                mysqldump_out = sys.stdout
+            mysqldump_out = output_file
 
         try:
             mysqldump_cmd = ["mysqldump"] + self.extra
@@ -62,9 +61,11 @@ class MySQLBackup(object):
                 gzip_process = subprocess.Popen(["gzip"], stdin=mysqldump_process.stdout,
                                                 stdout=gzip_out)
                 mysqldump_process.stdout.close()
-                gzip_process.wait()
+                if gzip_process.wait() != 0:
+                    raise MySQLBackupException("gzip failed for Postgres")
 
-            mysqldump_process.wait()
+            if mysqldump_process.wait() != 0:
+                raise MySQLBackupException("mysqldump failed for Postgres")
 
             if self.args.output:
                 LOG.info("mysql backup complete")
