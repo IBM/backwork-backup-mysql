@@ -1,6 +1,8 @@
 """Add support for MySQL backups
 """
 
+import os
+
 from os import path
 from setuptools import setup, find_packages
 
