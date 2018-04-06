@@ -1,8 +1,6 @@
 """Add support for MySQL backups
 """
 
-import os
-
 from os import path
 from setuptools import setup, find_packages
 
@@ -14,7 +12,7 @@ with open(path.join(HERE, 'README.md')) as f:
 
 setup(
     name="monsoon-backup-mysql",
-    version=os.environ.get("TRAVIS_TAG", "dev"),
+    version="0.1.7",
     description="Monsoon plug-in for MySQL backups.",
     long_description=LONG_DESCRIPTION,
     url="https://github.ibm.com/apset/monsoon-backup-mysql",
@@ -35,7 +33,7 @@ setup(
     ],
     packages=find_packages(),
     install_requires=[
-        "monsoon-cli>=0.1.0"
+        "monsoon-cli>=0.1.7"
     ],
     entry_points={
         "monsoon.backups": [
