@@ -38,7 +38,7 @@ setup(
         "backwork"
     ],
     entry_points={
-        "monsoon.backups": [
+        "backwork.backups": [
             "mysql=mysql:MySQLBackup"
         ]
     }

@@ -1,0 +1,17 @@
+language: python
+python: '3.6'
+cache:
+  pip: true
+install:
+- pip install .
+script:
+- echo "no tests implemented"
+deploy:
+  matrix:
+  - provider: pypi
+    user: __token__
+    password:
+      secure: NEwkYLcKsBitt5v+02EbJqqT9qlDJQ8U1Lha7piFav5UJdZqKBI4RlrBvCDeD60LmoK9g74YAlzh8h9l7vjL4mZ7McRh7WR+xy8SUoRguRKYc0xqBrXJiZBAxaRlc4Q8hs5YX3hP4h5vOI4HkjS3k5jrbZzKEuAqjdYl1Bz+P8uLjXLoXOz2ya4ub3y7tQZhYBNj6RG+zQPEk8oHQDF5cvzpE06VtL71smzrucyWbepOZXhkfGfXT0nAliXAv2zeyFCEXjnU6I2nWmu+QVdFl2N7fUikkfr6/+w8qqpEmaFSjm0SJap6Ij37i2+9QA+nPQvMQyYzSrOe8fFYEBQboo6cLB3132CEVGQixdp0GsnAflJ8pOTCMQB9/FS10WNlt7ztV4J+9yJE8w0DF3kbt0fC/MtZS/9WvxoqeyYKm9zjl0WJB/okRkm8/evIiefGclB9UKdSncNMtD3KGYWgV5nyVhcFnTfMvZSfXdpKw03aR2whJsbIzk04FV5DBCBZYIlecpMvuvrPuvyYIZdOgXcKKfnJXW3KeoNfBV+FdG4OJY/1Y0ceMEIoaxX2uPf5/i+EvJ40dncCQNBlEcR3EtlrQxn3kNDH9ozO+pN6eaBqSjRya6lVx1jVI8lyq5fhxhBoTjIAXhdLyIybaxExgSZnxgdDuUL5WfmwReOOZoA=
+    on:
+      tags: true
+      repo: IBM/backwork-upload-cos
