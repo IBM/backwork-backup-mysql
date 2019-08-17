@@ -2,3 +2,4 @@
 """
 
 from .mysql import MySQLBackup
+from .mysql import MySQLRestore

@@ -40,6 +40,9 @@ setup(
     entry_points={
         "backwork.backups": [
             "mysql=mysql:MySQLBackup"
-        ]
+        ],
+        "backwork.restores": [
+            "mysql=mysql:MySQLRestore"
+        ],
     }
 )
