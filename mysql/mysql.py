@@ -29,7 +29,8 @@ class MySQLBackup(object):
     @classmethod
     def parse_args(cls, subparsers):
         """Create the `mysql` subparser for the `backup` command."""
-        mysql_parser = subparsers.add_parser(cls.command, description=cls.__doc__)
+        mysql_parser = subparsers.add_parser(
+            cls.command, description=cls.__doc__)
 
         mysql_parser.add_argument("--gzip", action="store_true", required=False,
                                   help="compress output file (requires gzip to be installed)")
@@ -55,17 +56,18 @@ class MySQLBackup(object):
 
         try:
             mysqldump_cmd = ["mysqldump"] + self.extra
-            mysqldump_process = subprocess.Popen(mysqldump_cmd, stdout=mysqldump_out)
+            mysqldump_process = subprocess.Popen(
+                mysqldump_cmd, stdout=mysqldump_out)
 
             if self.args.gzip:
                 gzip_process = subprocess.Popen(["gzip"], stdin=mysqldump_process.stdout,
                                                 stdout=gzip_out)
                 mysqldump_process.stdout.close()
                 if gzip_process.wait() != 0:
-                    raise MySQLBackupException("gzip failed for Postgres")
+                    raise MySQLBackupException("gzip failed for MySQL")
 
             if mysqldump_process.wait() != 0:
-                raise MySQLBackupException("mysqldump failed for Postgres")
+                raise MySQLBackupException("mysqldump failed for MySQL")
 
             if self.args.output:
                 LOG.info("mysql backup complete")
@@ -77,3 +79,47 @@ class MySQLBackup(object):
         finally:
             if output_file and not output_file.closed:
                 output_file.close()
+
+
+class MySQLRestore(object):
+    """Restores MySQL databases.
+
+    It uses `mysql` so it's required to have it installed and added to the
+    system's PATH.
+    """
+    command = "mysql"
+
+    def __init__(self, args, extra):
+        self.args = args
+        self.extra = extra
+
+    @classmethod
+    def parse_args(cls, subparsers):
+        """Create the `mysql` subparser for the `backup` command."""
+        mysql_parser = subparsers.add_parser(
+            cls.command, description=cls.__doc__)
+
+        mysql_parser.add_argument("--gzip", action="store_true", required=False,
+                                  help="decompress backup file before restoring (requires gzip to be installed)")
+
+        mysql_parser.add_argument("-i", "--input", required=False,
+                                  help="input file (backup) path")
+
+    def restore(self):
+        """Restore a MySQL database."""
+
+        try:
+            mysqlrestore_cmd = [
+                *(["gunzip", "-c", str(self.args.input)]
+                  if self.args.gzip else ["cat", self.args.input]),
+                *["|", "mysql"],
+                *self.extra
+            ]
+            print(' '.join(mysqlrestore_cmd))
+            subprocess.Popen(
+                ' '.join(mysqlrestore_cmd), shell=True).wait()
+            LOG.info("Successfully restored MySQL database")
+
+        except Exception as error:
+            LOG.error("Failed to restore MySQL database")
+            raise error
