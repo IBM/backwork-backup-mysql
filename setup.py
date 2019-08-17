@@ -12,7 +12,7 @@ with open(path.join(HERE, 'README.md')) as f:
 
 setup(
     name="backwork-backup-mysql",
-    version="0.1.7",
+    version="0.3.0",
     description="Backwork plug-in for MySQL backups.",
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
