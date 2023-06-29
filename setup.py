@@ -2,17 +2,18 @@
 """
 
 from os import path
-from setuptools import setup, find_packages
+
+from setuptools import find_packages, setup
 
 HERE = path.abspath(path.dirname(__file__))
 
 # Get the long description from the README file
-with open(path.join(HERE, 'README.md')) as f:
+with open(path.join(HERE, "README.md")) as f:
     LONG_DESCRIPTION = f.read()
 
 setup(
     name="backwork-backup-mysql",
-    version="0.3.0",
+    version="0.3.1",
     description="Backwork plug-in for MySQL backups.",
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
@@ -28,21 +29,15 @@ setup(
         "Operating System :: POSIX :: Linux",
         "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 2 :: Only",
-        'License :: OSI Approved :: Apache Software License',
+        "License :: OSI Approved :: Apache Software License",
         "Topic :: Database",
         "Topic :: System :: Archiving :: Backup",
-        "Topic :: Utilities"
+        "Topic :: Utilities",
     ],
     packages=find_packages(),
-    install_requires=[
-        "backwork"
-    ],
+    install_requires=["backwork"],
     entry_points={
-        "backwork.backups": [
-            "mysql=mysql:MySQLBackup"
-        ],
-        "backwork.restores": [
-            "mysql=mysql:MySQLRestore"
-        ],
-    }
+        "backwork.backups": ["mysql=mysql:MySQLBackup"],
+        "backwork.restores": ["mysql=mysql:MySQLRestore"],
+    },
 )
